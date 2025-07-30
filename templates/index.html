@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DentalAI - Advanced Dental Detection System</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <div class="logo">
+                        <i class="fas fa-tooth"></i>
+                        <span class="logo-text">DentalAI</span>
+                    </div>
+                    <span class="tagline">Advanced Detection System</span>
+                </div>
+
+                <div class="nav-menu" id="navMenu">
+                    <a href="#home" class="nav-link active">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#analyze" class="nav-link">
+                        <i class="fas fa-search"></i>
+                        <span>Analyze</span>
+                    </a>
+                    <a href="#resultsSection" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Results</span>
+                    </a>
+                    <a href="#help" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help</span>
+                    </a>
+                </div>
+
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero-section" id="home">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">AI-Powered</span>
+                        Dental Radiography Analysis
+                    </h1>
+                    <p class="hero-description">
+                        Upload dental X-rays and get instant AI-powered detection of cavities, crowns,
+                        root canals, and other dental conditions with precise treatment recommendations.
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" data-label="accuracy">98.5%</div>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-label="analysisTime">
+                                < 30s</div>
+                                    <div class="stat-label">Analysis Time</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" data-label="classes">30+</div>
+                                <div class="stat-label">Conditions Detected</div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+            <!-- Upload Section -->
+            <section class="upload-section" id="analyze">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-upload"></i>
+                        Upload Dental Radiography
+                    </h2>
+                    <p class="section-description">
+                        Select or drag and drop your dental X-ray image for AI analysis
+                    </p>
+                </div>
+
+                <div class="upload-container">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h3>Drop your X-ray image here</h3>
+                            <p>or click to browse files</p>
+                            <div class="supported-formats">
+                                <span>Supported: JPG, PNG, DICOM</span>
+                            </div>
+                            <input type="file" id="fileInput" accept="image/*,.dcm" hidden>
+                            <button class="upload-btn" id="uploadBtn">
+                                <i class="fas fa-folder-open"></i>
+                                Choose File
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="upload-info">
+                        <div class="info-card">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Secure & Private</h4>
+                            <p>Your images are processed securely and never stored permanently</p>
+                        </div>
+                        <div class="info-card">
+                            <i class="fas fa-clock"></i>
+                            <h4>Fast Analysis</h4>
+                            <p>Get results in under 30 seconds with our advanced AI models</p>
+                        </div>
+                        <div class="info-card">
+                            <i class="fas fa-certificate"></i>
+                            <h4>Medical Grade</h4>
+                            <p>FDA-approved algorithms for professional dental diagnosis</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="analyze-btn" id="analyzeBtn" disabled>
+                    <span class="btn-icon"><i class="fas fa-brain"></i></span>
+                    <span class="btn-text">Analyze with AI</span>
+                    <div class="loader" id="loader"></div>
+                </button>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection">
+                <div class="results" style="display: none;">
+
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            Analysis Results
+                        </h2>
+                        <p class="section-description">
+                            AI-detected conditions and treatment recommendations
+                        </p>
+                    </div>
+
+                    <div class="results-grid">
+                        <!-- Canvas Container -->
+                        <div class="canvas-container">
+                            <div class="canvas-header">
+                                <h3>
+                                    <i class="fas fa-eye"></i>
+                                    Detection Visualization
+                                </h3>
+                                <div class="canvas-controls">
+                                    <button class="control-btn" id="downloadBtn">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="canvas-wrapper">
+                                <canvas id="imageCanvas"></canvas>
+                            </div>
+
+                            <!-- Label Controls -->
+                            <div class="label-controls">
+                                <div class="controls-header">
+                                    <h4>
+                                        <i class="fas fa-tags"></i>
+                                        Detection Labels
+                                    </h4>
+                                    <div class="control-buttons">
+                                        <button class="control-btn small" id="showAllBtn">
+                                            <i class="fas fa-eye"></i>
+                                            Show All
+                                        </button>
+                                        <button class="control-btn small" id="hideAllBtn">
+                                            <i class="fas fa-eye-slash"></i>
+                                            Hide All
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="label-list" id="labelList"></div>
+                            </div>
+                        </div>
+
+                        <!-- Treatment Suggestions -->
+                        <div class="treatment-container">
+                            <div class="treatment-header">
+                                <h3>
+                                    <i class="fas fa-stethoscope"></i>
+                                    Treatment Recommendations
+                                </h3>
+                                <button class="export-btn" id="exportBtn">
+                                    <i class="fas fa-file-pdf"></i>
+                                    Export Report
+                                </button>
+                            </div>
+
+                            <div class="treatment-list" id="treatmentList"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="elements">
+            <div class="floating-element" data-animate="floating-1"></div>
+            <div class="floating-element" data-animate="floating-2"></div>
+            <div class="floating-element" data-animate="floating-3"></div>
+            <div class="floating-element" data-animate="floating-4"></div>
+            <div class="floating-element" data-animate="floating-5"></div>
+            <div class="floating-element" data-animate="floating-6"></div>
+            <div class="floating-element" data-animate="floating-7"></div>
+            <div class="floating-element" data-animate="floating-8"></div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="logo">
+                            <i class="fas fa-tooth"></i>
+                            <span class="logo-text">DentalAI</span>
+                        </div>
+                        <p class="footer-description">
+                            Advanced AI-powered dental radiography analysis system
+                            for accurate diagnosis and treatment planning.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#api">API Documentation</a></li>
+                        <li><a href="#integrations">Integrations</a></li>
+                        <li><a href="#changelog">Changelog</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#docs">Documentation</a></li>
+                        <li><a href="#tutorials">Tutorials</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#webinars">Webinars</a></li>
+                        <li><a href="#case-studies">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#help">Help Center</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#status">System Status</a></li>
+                        <li><a href="#community">Community</a></li>
+                        <li><a href="#feedback">Feedback</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#press">Press Kit</a></li>
+                        <li><a href="#partners">Partners</a></li>
+                        <li><a href="#investors">Investors</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="copyright">
+                        <p>&copy; 2024 DentalAI. All rights reserved.</p>
+                    </div>
+                    <div class="footer-bottom-links">
+                        <a href="#privacy">Privacy Policy</a>
+                        <a href="#terms">Terms of Service</a>
+                        <a href="#cookies">Cookie Policy</a>
+                        <a href="#compliance">HIPAA Compliance</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Status Messages -->
+    <div class="status-message" id="statusMessage" data-animate="status-message">test</div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" data-animate="loading-overlay">
+        <div class="loading-content" data-animate="loading-content">
+            <div class="loading-spinner" data-animate="loading-spinner"></div>
+            <h3 data-animate="loading-title">Analyzing Image...</h3>
+            <p data-animate="loading-subtitle">Our AI is processing your dental radiography</p>
+            <div class="loading-progress" data-animate="loading-progress">
+                <div class="progress-bar" id="progressBar" data-animate="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="script.js"></script> -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
