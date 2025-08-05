@@ -23,17 +23,16 @@ def index():
 
 @app.route("/predict", methods=["POST"])
 def home():
-    data = request.get_json()
-    if 'image' not in data:
-        return jsonify({'error': 'No image provided'}), 400
-    
-    img_data = data['image']
-    if img_data.startswith('data:image/jpeg;base64,'):
-        img_data = img_data.replace('data:image/jpeg;base64,', '')
-    elif img_data.startswith('data:image/png;base64,'):
-        img_data = img_data.replace('data:image/png;base64,', '')
-    
     try:
+        data = request.get_json()
+        if 'image' not in data:
+            return jsonify({'error': 'No image provided'}), 400
+        
+        img_data = data['image']
+        if img_data.startswith('data:image/jpeg;base64,'):
+            img_data = img_data.replace('data:image/jpeg;base64,', '')
+        elif img_data.startswith('data:image/png;base64,'):
+            img_data = img_data.replace('data:image/png;base64,', '')
         img_bytes = base64.b64decode(img_data)
         img = Image.open(BytesIO(img_bytes))   
 
@@ -121,5 +120,5 @@ def predict(img):
 
 
 if __name__ == "__main__":
-    print("Starting the server... at http://localhost:5000")
-    app.run()
+    app.run(host="0.0.0.0")
+ 

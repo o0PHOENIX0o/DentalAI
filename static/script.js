@@ -301,7 +301,8 @@ class DentalDetection {
             const response = await fetch('/predict', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    "ngrok-skip-browser-warning": "69420",
                 },
                 body: JSON.stringify({ image: img.src })
             });
