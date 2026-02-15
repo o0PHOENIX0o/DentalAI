@@ -53,14 +53,9 @@ static/           # JS/CSS and other static assets
 
 ## Usage / Endpoints
 
-- Open a browser and navigate to http://127.0.0.1:5000 (or the host/port printed by `app.py`).
-- The UI in `templates/index.html` and `static/script.js` provide the front-end.
+- Open a browser and navigate to http://127.0.0.1:8000 (or the host/port printed by `app.py`).
+- The UI in `templates/index.html` and `static/script.js` provide the front-end!.
 
-## Troubleshooting
-
-- If model loading fails: confirm `model.pt` exists and `app.py` points to the correct path. The model can be large—ensure sufficient disk space and memory.
-- If port 5000 is already in use, change the port when starting the app (see `app.py` or the framework docs).
-- If package installs fail, ensure you activated the venv and are using a compatible Python version.
 
 
 
